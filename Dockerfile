@@ -1,4 +1,4 @@
-FROM python:3.8.10
+FROM python:3.8-alpine
 WORKDIR /workdir
 COPY ./ ./
 RUN pip install --no-cache-dir sanic aiohttp
