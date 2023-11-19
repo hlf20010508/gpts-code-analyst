@@ -1,4 +1,7 @@
 .DS_Store
+test*
+dev.sh
+devrc.sh
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
