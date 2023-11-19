@@ -1,0 +1,79 @@
+{
+    "openapi": "3.1.0",
+    "info": {
+      "title": "Get github repo",
+      "description": "Get github repo details.",
+      "version": "v1.0.0"
+    },
+    "servers": [
+      {
+        "url": "https://example.com"
+      }
+    ],
+    "paths": {
+      "/structure": {
+        "get": {
+          "description": "Get repo structure",
+          "operationId": "GetStructure",
+          "parameters": [
+            {
+              "name": "user",
+              "in": "query",
+              "description": "The owner of repo",
+              "required": true,
+              "schema": {
+                "type": "string"
+              }
+            },
+            {
+              "name": "repo",
+              "in": "query",
+              "description": "The name of repo",
+              "required": true,
+              "schema": {
+                "type": "string"
+              }
+            }
+          ]
+        }
+      },
+      "/details": {
+        "get": {
+          "description": "Get the details of given file relative path",
+          "operationId": "GetDetails",
+          "parameters": [
+            {
+              "name": "user",
+              "in": "query",
+              "description": "The owner of repo",
+              "required": true,
+              "schema": {
+                "type": "string"
+              }
+            },
+            {
+              "name": "repo",
+              "in": "query",
+              "description": "The name of repo",
+              "required": true,
+              "schema": {
+                "type": "string"
+              }
+            },
+            {
+              "name": "path_list",
+              "in": "query",
+              "description": "The relative path of given files, values are from GetStructure. Maximum 5 path, seperated by ', '",
+              "required": true,
+              "schema": {
+                "type": "string"
+              }
+            }
+          ]
+        }
+      }
+    },
+    "components": {
+      "schemas": {}
+    }
+  }

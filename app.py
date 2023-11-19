@@ -28,10 +28,12 @@ def get_file_details(user, repo, path):
     response = requests.get(url)
     url = response.json()['download_url']
     response = requests.get(url)
-
-    if response.status_code == 200:
-        return response.content.decode()
-    else:
+    try:
+        if response.status_code == 200:
+            return response.content.decode()
+        else:
+            return ''
+    except:
         return ''
 
 @app.route("/structure")
@@ -49,12 +51,18 @@ def structure():
 def details():
     user = request.args.get('user')
     repo = request.args.get('repo')
-    path = request.args.get('path')
+    path_list = request.args.get('path_list')
 
-    result = get_file_details(user, repo, path)
+    path_list = path_list.split(', ')
+
+    result = ''
+    for path in path_list:
+        result += path + ':\n'
+        result += get_file_details(user, repo, path)
+        result += '\n'
 
     if not result:
-        result = 'file not found'
+        result = 'file(s) not found'
     return result
 
 @app.route("/privacy")
@@ -84,3 +92,8 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 </p>
 '''
+
+@app.route("/schema")
+def schema():
+    with open('schema.json', 'r') as file:
+        return file.read()
