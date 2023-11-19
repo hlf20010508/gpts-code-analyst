@@ -1,38 +1,36 @@
 import requests
-import os
 from flask import Flask, request
 
 app = Flask(__name__)
 
-def get_repo_contents(user, repo, path=''):
-    url = f"https://api.github.com/repos/{user}/{repo}/contents/{path}"
-    response = requests.get(url)
-    if response.status_code == 200:
-        return response.json()
-    else:
-        return None
+def get_repo_structure(user, repo):
+    try:
+        url = f'https://api.github.com/repos/{user}/{repo}'
+        response = requests.get(url)
+        branch = response.json()['default_branch']
 
-def get_directory_structure(user, repo, parent=''):
-    contents = get_repo_contents(user, repo, parent)
-    result = ''
-    if contents is not None:
-        for item in contents:
-            if item['type'] == 'dir':
-                result += get_directory_structure(user, repo, item['path'])
-            else:
-                result += os.path.join(parent, item['name']) + '\n'
+        url = f'https://api.github.com/repos/{user}/{repo}/git/trees/{branch}?recursive=1'
+        response = requests.get(url)
+        tree = response.json()['tree']
+        path_list = [i['path'] for i in tree]
+        result = '\n'.join(path_list)
+    except:
+        result = ''
+
     return result
 
 def get_file_details(user, repo, path):
-    url = f'https://api.github.com/repos/{user}/{repo}/contents/{path}'
-    response = requests.get(url)
-    url = response.json()['download_url']
-    response = requests.get(url)
     try:
+        url = f'https://api.github.com/repos/{user}/{repo}/contents/{path}'
+        response = requests.get(url)
+    
+        url = response.json()['download_url']
+        response = requests.get(url)
+
         if response.status_code == 200:
             return response.content.decode()
         else:
-            return ''
+            raise
     except:
         return ''
 
@@ -41,7 +39,7 @@ def structure():
     user = request.args.get('user')
     repo = request.args.get('repo')
     
-    result = get_directory_structure(user, repo)
+    result = get_repo_structure(user, repo)
 
     if not result:
         result = 'repo not found'
@@ -57,9 +55,7 @@ def details():
 
     result = ''
     for path in path_list:
-        result += path + ':\n'
-        result += get_file_details(user, repo, path)
-        result += '\n'
+        result += f'{path}:\n{get_file_details(user, repo, path)}\n'
 
     if not result:
         result = 'file(s) not found'
