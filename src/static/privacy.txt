@@ -1,0 +1,15 @@
+Code Analyst隐私声明：
+本程序不会存储或记忆用户的个人数据。
+本程序处理的所有数据，包括GitHub仓库信息和代码分析结果，仅在当前会话中可用。会话结束后，这些数据不会被保存或用于任何其他目的。
+本程序不会索取用户的个人信息。在分析GitHub仓库时，本程序只访问公开可用的代码和信息，不会尝试访问或分析任何私有仓库或受保护的数据。
+本程序会在处理所有请求时保持最高标准的安全性。用户在会话中提供的任何数据都将在会话结束时从本程序的系统中清除。
+本程序会确保响应透明、准确，并且仅限于用户的请求范围，不会推断、存储或使用用户的数据超出其提出的问题的范围。
+本程序将遵守所有适用的法律和规章制度，包括但不限于数据保护和隐私法规。
+
+
+Code Analyst Privacy Statement:
+This program does not store or remember users' personal data. All data processed by this program, including GitHub repository information and code analysis results, are only available during the current session. After the session ends, this data will not be saved or used for any other purposes.
+This program does not request users' personal information. When analyzing GitHub repositories, it only accesses publicly available code and information and will not attempt to access or analyze any private repositories or protected data.
+This program maintains the highest standard of security in processing all requests. Any data provided by users during the session will be cleared from this program's system once the session ends.
+This program ensures transparent and accurate responses that are limited to the scope of users' requests. It will not infer, store, or use users' data beyond the scope of their posed questions.
+This program will comply with all applicable laws and regulations, including but not limited to data protection and privacy laws.
