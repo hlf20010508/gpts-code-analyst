@@ -1,3 +1,5 @@
 *
-!run.py
+!static
 !src
+!Cargo.toml
+!Cargo.lock

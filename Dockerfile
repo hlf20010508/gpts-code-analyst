@@ -1,5 +1,10 @@
-FROM python:3.8-alpine
+FROM rust:alpine3.18 AS builder
 WORKDIR /workdir
 COPY ./ ./
-RUN pip install --no-cache-dir sanic aiohttp
-CMD sanic run.app -H 0.0.0.0 -p 8080
+RUN apk add --update --no-cache musl-dev &&\
+    cargo build --release
+
+FROM scratch
+COPY --from=builder /workdir/target/release/gpts-code-analyst /
+COPY --from=builder /workdir/static /static
+CMD ["/gpts-code-analyst"]

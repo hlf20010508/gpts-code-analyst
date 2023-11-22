@@ -11,7 +11,20 @@ Github Code Analyst over GPTs
 ## Docker部署
 ```sh
 PORT=8080 # 改成你的端口号
-docker run -d --name code-analyst -p $PORT:8080 hlf01/gpts-code-analyst
+GITHUB_TOKEN=xxxxxxxxxxxxxx # 改成你的Github Token
+docker run -d --name code-analyst -p $PORT:8080 -e GITHUB_TOKEN=$GITHUB_TOKEN hlf01/gpts-code-analyst
+```
+
+## Docker构建
+```sh
+docker build --tag gpts-code-analyst --no-cache .
+```
+
+## Rust构建
+```sh
+cargo build --release
+# 运行
+./target/release/gpts-code-analyst
 ```
 
 ## GPTs
