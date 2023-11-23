@@ -7,4 +7,4 @@ RUN apk add --update --no-cache musl-dev &&\
 FROM scratch
 COPY --from=builder /workdir/target/release/gpts-code-analyst /
 COPY --from=builder /workdir/static /static
-CMD ["/gpts-code-analyst"]
+ENTRYPOINT ["/gpts-code-analyst"]

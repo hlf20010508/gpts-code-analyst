@@ -1,5 +1,5 @@
 use async_std::io::{Error, ErrorKind, Result};
-use std::env::var;
+use pico_args::Arguments;
 
 pub async fn get(url: &str) -> Result<String> {
     let client = awc::Client::builder()
@@ -8,7 +8,8 @@ pub async fn get(url: &str) -> Result<String> {
 
     let mut request = client.get(url).insert_header(("User-Agent", "Actix-web"));
 
-    if let Ok(github_token) = var("GITHUB_TOKEN") {
+    let mut args = Arguments::from_env();
+    if let Ok(github_token) = args.value_from_str::<&str, String>("--token") {
         request = request.insert_header(("Authorization", format!("Bearer {}", github_token)));
     } else {
         return Err(Error::new(

@@ -12,7 +12,7 @@ Github Code Analyst over GPTs
 ```sh
 PORT=8080 # 改成你的端口号
 GITHUB_TOKEN=xxxxxxxxxxxxxx # 改成你的Github Token
-docker run -d --name code-analyst -p $PORT:8080 -e GITHUB_TOKEN=$GITHUB_TOKEN hlf01/gpts-code-analyst
+docker run -d --name code-analyst -p $PORT:8080 hlf01/gpts-code-analyst --token $GITHUB_TOKEN
 ```
 
 ## Docker构建
