@@ -24,7 +24,7 @@ docker build --tag gpts-code-analyst --no-cache .
 ```sh
 cargo build --release
 # 运行
-./target/release/gpts-code-analyst
+./target/release/gpts-code-analyst --token $GITHUB_TOKEN
 ```
 
 ## GPTs
