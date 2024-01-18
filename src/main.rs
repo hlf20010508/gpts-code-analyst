@@ -1,3 +1,10 @@
+/*
+:project: gpts-code-analyst
+:author: L-ING
+:copyright: (C) 2024 L-ING <hlf01@icloud.com>
+:license: MIT, see LICENSE for more details.
+*/
+
 use actix_web::http::header;
 use actix_web::middleware::{DefaultHeaders, Logger};
 use actix_web::{web, App, HttpServer};

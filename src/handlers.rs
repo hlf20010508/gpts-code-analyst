@@ -1,3 +1,10 @@
+/*
+:project: gpts-code-analyst
+:author: L-ING
+:copyright: (C) 2024 L-ING <hlf01@icloud.com>
+:license: MIT, see LICENSE for more details.
+*/
+
 use actix_web::{web, HttpResponse};
 use std::error::Error;
 use tokio::fs::read_to_string;
