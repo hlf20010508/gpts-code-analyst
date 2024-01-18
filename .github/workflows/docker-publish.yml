@@ -9,6 +9,11 @@ on:
 
 env:
   REPO: hlf01/gpts-code-analyst
+  NAME: L-ING
+  EMAIL: hlf01@icloud.com
+  GITHUB_TOKEN: ${{ secrets.MY_GITHUB_TOKEN }}
+  TAG_NAME: ${{ github.event_name == 'workflow_dispatch' && 'dev' || github.event.release.name }}
+  RELEASE_VERSION: ${{ github.event.release.name }}
 
 permissions:
   contents: read
@@ -21,8 +26,28 @@ jobs:
     if: github.repository_owner == 'hlf20010508'
     steps:
     - name: Checkout
-      uses: actions/checkout@v3
-      
+      uses: actions/checkout@v4
+      with:
+        token: ${{ env.GITHUB_TOKEN }}
+    
+    - name: Update Version in Your Python Package
+      run: |
+        PROJECT_NAME=$(grep '^name = ' Cargo.toml | awk -F'"' '{print $2}')
+        sed -i "/^name = \"$PROJECT_NAME\"$/{N; s/version = \".*\"/version = \"$RELEASE_VERSION\"/}" Cargo.toml
+        sed -i "/^name = \"$PROJECT_NAME\"$/{N; s/version = \".*\"/version = \"$RELEASE_VERSION\"/}" Cargo.lock
+      if: github.event_name == 'release' && github.event.action == 'published'
+
+    - name: Commit and Push
+      run: |
+        git config --global user.name $NAME
+        git config --global user.email $EMAIL
+        git add -A
+        git commit -m "chore: update version to $RELEASE_VERSION"
+        git tag -f $RELEASE_VERSION
+        git push origin HEAD:master
+        git push origin HEAD:master --tags -f
+      if: github.event_name == 'release' && github.event.action == 'published'
+
     - name: Set up QEMU
       uses: docker/setup-qemu-action@v3
     
@@ -42,7 +67,7 @@ jobs:
         context: .
         platforms: linux/amd64,linux/arm64
         push: true
-        tags: ${{ env.REPO }}:${{ github.event.release.name }},${{ env.REPO }}:latest,${{ env.REPO }}:dev
+        tags: ${{ env.REPO }}:${{ env.RELEASE_VERSION }},${{ env.REPO }}:latest,${{ env.REPO }}:dev
       if: github.event_name == 'release' && github.event.action == 'published'
 
     - name: Build and push image dev
@@ -54,3 +79,7 @@ jobs:
         push: true
         tags: ${{ env.REPO }}:dev
       if: github.event_name == 'workflow_dispatch'
+    
+    - name: Send Notification
+      run: |
+        curl -X POST -d "title=Github Actions Notification&body=$GITHUB_REPOSITORY@$TAG_NAME build completed." ${{ secrets.WEBHOOK_URL }}
