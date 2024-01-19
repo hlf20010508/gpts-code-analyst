@@ -6,14 +6,13 @@
 */
 
 use anyhow::Context;
-use pico_args::Arguments;
 use std::error::Error;
 
+use crate::env::GITHUB_TOKEN;
 use crate::structures::{FileInfo, PathTree, RepoInfo};
 
 pub fn create_client() -> Result<reqwest::Client, Box<dyn Error>> {
-    let mut args = Arguments::from_env();
-    let github_token = args.value_from_str::<&str, String>("--token")?;
+    let github_token = GITHUB_TOKEN.as_ref()?;
     let mut headers = reqwest::header::HeaderMap::new();
     headers.insert(
         reqwest::header::AUTHORIZATION,

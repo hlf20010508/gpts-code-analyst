@@ -13,6 +13,7 @@ use env_logger::Env;
 mod handlers;
 mod structures;
 mod utils;
+mod env;
 
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {
