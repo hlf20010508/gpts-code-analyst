@@ -87,3 +87,7 @@ jobs:
     - name: Send Notification
       run: |
         curl -X POST -d "title=Github Actions Notification&body=$GITHUB_REPOSITORY@$TAG_NAME build completed." ${{ secrets.WEBHOOK_URL }}
+
+    - name: Deploy on Render
+      run: |
+        curl https://api.render.com/deploy/srv-cld2carmot1c73dkgqn0?key=Xg-68_5aZZk
