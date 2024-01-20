@@ -11,18 +11,48 @@ use std::error::Error;
 use crate::env::GITHUB_TOKEN;
 use crate::structures::{FileInfo, PathTree, RepoInfo};
 
+macro_rules! error_location {
+    ($var:expr, $context:expr) => {
+        format!(
+            "Error in {} line {} {}:\n{}",
+            file!(),
+            line!(),
+            $var,
+            $context,
+        )
+    };
+}
+
 pub fn create_client() -> Result<reqwest::Client, Box<dyn Error>> {
-    let github_token = GITHUB_TOKEN.as_ref()?;
+    let github_token = GITHUB_TOKEN.as_ref().context(error_location!(
+        "create_client.github_token",
+        "Need CMD arg --token."
+    ))?;
     let mut headers = reqwest::header::HeaderMap::new();
     headers.insert(
         reqwest::header::AUTHORIZATION,
-        format!("Bearer {}", github_token).parse()?,
+        format!("Bearer {}", github_token)
+            .parse()
+            .context(error_location!(
+                "create_client.headers",
+                "Parse Athorization error."
+            ))?,
     );
-    headers.insert(reqwest::header::USER_AGENT, "reqwest".parse()?);
+    headers.insert(
+        reqwest::header::USER_AGENT,
+        "reqwest".parse().context(error_location!(
+            "create_client.headers",
+            "Parse User-Agent error."
+        ))?,
+    );
 
     let client = reqwest::Client::builder()
         .default_headers(headers)
-        .build()?;
+        .build()
+        .context(error_location!(
+            "create_client.build",
+            "Build client error."
+        ))?;
 
     return Ok(client);
 }
